@@ -1,0 +1,31 @@
+[package]
+name = "wasi-math"
+publish = false
+version = "0.0.0"
+categories = ["wasm"]
+keywords = ["webassembly", "wasm"]
+description = "Example runtime for wasi-math"
+repository = "https://github.com/oovm/wasi-math"
+documentation = "https://docs.rs/wasi-math"
+readme = "README.md"
+license = "WASI Specification"
+edition = "2021"
+exclude = ["package.json", "tests/**"]
+
+[dependencies]
+anyhow = "1.0"
+num = "0.4.1"
+wat = "1.201.0"
+
+[dependencies.wasmtime-wasi]
+git = "https://github.com/bytecodealliance/wasmtime"
+version = "20.0.0"
+features = []
+
+[dependencies.wasmtime]
+git = "https://github.com/bytecodealliance/wasmtime"
+version = "20.0.0"
+features = ["component-model", "async"]
+
+[dev-dependencies]
+tokio = { version = "1.36.0", features = ["full"] }

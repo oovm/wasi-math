@@ -1,0 +1,42 @@
+interface types {
+  /// The basic unit of big numbers, which can be shared in big-integer, big-fraction, big-complex and other composite structures.
+  resource unsigned-integer {
+    from-u32: static func(value: u32) -> unsigned-integer;
+    from-u64: static func(value: u64) -> unsigned-integer;
+
+    add: func(other: unsigned-integer) -> unsigned-integer;
+    sub: func(other: unsigned-integer) -> unsigned-integer;
+    sub-saturating: func(other: unsigned-integer) -> unsigned-integer;
+    sub-checked: func(other: unsigned-integer) -> option<unsigned-integer>;
+
+    mul: func(other: unsigned-integer) -> unsigned-integer;
+    div: func(other: unsigned-integer) -> unsigned-integer;
+
+    as-f32: func() -> float32;
+    as-f64: func() -> float64;
+  }
+  enum sign {
+    /// Neither positive nor negative, such as zero
+    no-sign,
+      /// This is a positive number greater than zero
+    positive,
+      /// This is a negative number less than zero
+    negative,
+  }
+  record integer {
+    sign: sign,
+    digits: unsigned-integer,
+  }
+  /// The numerator and denominator must be the simplest fraction, that is, gcd(numerator, denominator) = 1.
+  ///
+  /// ## Zero
+  ///
+  /// The canonical form is fraction { sign = no-sign, numerator = 0, denominator = 1 }.
+  ///
+  /// If the sign is no-sign, then the number is considered to represent zero and the numerator and denominator are no longer checked.
+  record fraction {
+    sign: sign,
+    numerator: unsigned-integer,
+    denominator: unsigned-integer,
+  }
+}

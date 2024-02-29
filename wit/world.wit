@@ -1,0 +1,7 @@
+package wasi:math@0.2.1-draft;
+
+world imports {
+    import types;
+    import conversion;
+    import arithmetic;
+}
