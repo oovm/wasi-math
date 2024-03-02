@@ -33,7 +33,7 @@
 <h5>Record Fields</h5>
 <ul>
 <li><a name="integer.sign"><a href="#sign"><code>sign</code></a></a>: <a href="#sign"><a href="#sign"><code>sign</code></a></a></li>
-<li><a name="integer.digits"><code>digits</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="integer.digits"><code>digits</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h4><a name="fraction"><code>record fraction</code></a></h4>
 <p>The numerator and denominator must be the simplest fraction, that is, gcd(numerator, denominator) = 1.</p>
@@ -43,8 +43,8 @@
 <h5>Record Fields</h5>
 <ul>
 <li><a name="fraction.sign"><a href="#sign"><code>sign</code></a></a>: <a href="#sign"><a href="#sign"><code>sign</code></a></a></li>
-<li><a name="fraction.numerator"><code>numerator</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="fraction.denominator"><code>denominator</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="fraction.numerator"><code>numerator</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="fraction.denominator"><code>denominator</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <hr />
 <h3>Functions</h3>
@@ -70,7 +70,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.add.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.add.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.add.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -80,7 +80,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.sub.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.sub.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.sub.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -90,7 +90,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.sub_saturating.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.sub_saturating.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.sub_saturating.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -100,7 +100,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.sub_checked.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.sub_checked.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.sub_checked.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -110,7 +110,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.mul.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.mul.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.mul.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -120,7 +120,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_unsigned_integer.div.self"><code>self</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
-<li><a name="method_unsigned_integer.div.other"><code>other</code></a>: own&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
+<li><a name="method_unsigned_integer.div.other"><code>other</code></a>: borrow&lt;<a href="#unsigned_integer"><a href="#unsigned_integer"><code>unsigned-integer</code></a></a>&gt;</li>
 </ul>
 <h5>Return values</h5>
 <ul>
