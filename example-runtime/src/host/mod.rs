@@ -1,52 +1,116 @@
 use wasmtime::component::{Resource};
-use crate::wasi::math::types::{HostUnsignedInteger, UnsignedInteger};
+use crate::wasi::math::types::{Fraction, HostFraction, HostInteger, HostIntegerBuffer, HostUnsignedInteger, Integer, IntegerBuffer, MathError, ParseError, Sign, UnsignedInteger};
 
 #[derive(Default)]
 pub struct MathContext {}
 
 #[allow(unused_variables)]
-impl HostUnsignedInteger for MathContext {
-    fn from_u32(&mut self, value: u32) -> anyhow::Result<Resource<UnsignedInteger>> {
+impl HostInteger for MathContext {
+    fn from_u32(&mut self, value: u32) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn from_u64(&mut self, value: u64) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn from_u64(&mut self, value: u64) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn add(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn parse(&mut self, text: String, radix: u32) -> anyhow::Result<Result<Resource<Integer>, ParseError>> {
         todo!()
     }
 
-    fn sub(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn add(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn sub_saturating(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn sub(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn sub_checked(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Option<Resource<UnsignedInteger>>> {
+    fn mul(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn mul(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn div(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
         todo!()
     }
 
-    fn div(&mut self, self_: Resource<UnsignedInteger>, other: Resource<UnsignedInteger>) -> anyhow::Result<Resource<UnsignedInteger>> {
+    fn as_f32(&mut self, self_: Resource<Integer>) -> anyhow::Result<f32> {
         todo!()
     }
 
-    fn as_f32(&mut self, self_: Resource<UnsignedInteger>) -> anyhow::Result<f32> {
+    fn as_u32(&mut self, self_: Resource<Integer>) -> anyhow::Result<Result<u32, MathError>> {
         todo!()
     }
 
-    fn as_f64(&mut self, self_: Resource<UnsignedInteger>) -> anyhow::Result<f64> {
+    fn as_f64(&mut self, self_: Resource<Integer>) -> anyhow::Result<f64> {
         todo!()
     }
 
-    fn drop(&mut self, rep: Resource<UnsignedInteger>) -> anyhow::Result<()> {
+    fn as_u64(&mut self, self_: Resource<Integer>) -> anyhow::Result<Result<u64, MathError>> {
+        todo!()
+    }
+
+    fn clone(&mut self, self_: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
+        todo!()
+    }
+
+    fn to_buffer(&mut self, self_: Resource<Integer>) -> anyhow::Result<Resource<IntegerBuffer>> {
+        todo!()
+    }
+
+    fn to_radix_string(&mut self, self_: Resource<Integer>, radix: u32) -> anyhow::Result<String> {
+        todo!()
+    }
+
+    fn drop(&mut self, rep: Resource<Integer>) -> anyhow::Result<()> {
+        todo!()
+    }
+}
+
+impl HostIntegerBuffer for MathContext {
+    fn new(&mut self, capacity: u64) -> anyhow::Result<Resource<IntegerBuffer>> {
+        todo!()
+    }
+
+    fn add_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
+        todo!()
+    }
+
+    fn sub_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
+        todo!()
+    }
+
+    fn mul_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
+        todo!()
+    }
+
+    fn div_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<Result<(), MathError>> {
+        todo!()
+    }
+
+    fn finish(&mut self, self_: Resource<IntegerBuffer>) -> anyhow::Result<Resource<Integer>> {
+        todo!()
+    }
+
+    fn drop(&mut self, rep: Resource<IntegerBuffer>) -> anyhow::Result<()> {
+        todo!()
+    }
+}
+
+impl HostFraction for MathContext {
+    fn sign(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Sign> {
+        todo!()
+    }
+
+    fn numerator(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Resource<Integer>> {
+        todo!()
+    }
+
+    fn denominator(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Resource<Integer>> {
+        todo!()
+    }
+
+    fn drop(&mut self, rep: Resource<Fraction>) -> anyhow::Result<()> {
         todo!()
     }
 }

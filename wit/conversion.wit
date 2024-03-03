@@ -1,4 +1,4 @@
 interface conversion {
-  use types.{unsigned-integer, integer};
+    use types.{integer};
 
 }

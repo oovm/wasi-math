@@ -1,116 +1,116 @@
 interface arithmetic {
-  use types.{unsigned-integer, integer};
+    use types.{integer};
 
-  /// Raises a number to a floating point power.
-  pow-f32: func(base: float32, exponent: float32) -> float32;
-  /// Raises a number to a floating point power.
-  pow-f64: func(base: float64, exponent: float64) -> float64;
+    /// Raises a number to a floating point power.
+    pow-f32: func(base: float32, exponent: float32) -> float32;
+    /// Raises a number to a floating point power.
+    pow-f64: func(base: float64, exponent: float64) -> float64;
 
-  /// Returns the cube root of a number, more accurate than using pow function
-  cbrt-f32: func(value: float32) -> float32;
-  /// Returns the cube root of a number, more accurate than using pow function
-  cbrt-f64: func(value: float64) -> float64;
-  /// Compute the distance between the origin and a point (x, y) on the Euclidean plane. Equivalently, compute the length of the hypotenuse of a right-angle triangle with other sides having length x.abs() and y.abs().
-  hypot-f32: func(x: float32, y: float32) -> float32;
-  /// Compute the distance between the origin and a point (x, y) on the Euclidean plane. Equivalently, compute the length of the hypotenuse of a right-angle triangle with other sides having length x.abs() and y.abs().
-  hypot-f64: func(x: float32, y: float32) -> float32;
+    /// Returns the cube root of a number, more accurate than using pow function
+    cbrt-f32: func(value: float32) -> float32;
+    /// Returns the cube root of a number, more accurate than using pow function
+    cbrt-f64: func(value: float64) -> float64;
+    /// Compute the distance between the origin and a point (x, y) on the Euclidean plane. Equivalently, compute the length of the hypotenuse of a right-angle triangle with other sides having length x.abs() and y.abs().
+    hypot-f32: func(x: float32, y: float32) -> float32;
+    /// Compute the distance between the origin and a point (x, y) on the Euclidean plane. Equivalently, compute the length of the hypotenuse of a right-angle triangle with other sides having length x.abs() and y.abs().
+    hypot-f64: func(x: float32, y: float32) -> float32;
 
-  /// Returns the exponential e^value, more accurate than using pow function
-  exp-f32: func(value: float32) -> float32;
-  /// Returns the exponential e^value, more accurate than using pow function
-  exp-f64: func(value: float64) -> float64;
-  /// Returns e^value - 1 in a way that is accurate even if the number is close to zero.
-  exp-m1-f32: func(value: float32) -> float32;
-  /// Returns e^value - 1 in a way that is accurate even if the number is close to zero.
-  exp-m1-f64: func(value: float64) -> float64;
+    /// Returns the exponential e^value, more accurate than using pow function
+    exp-f32: func(value: float32) -> float32;
+    /// Returns the exponential e^value, more accurate than using pow function
+    exp-f64: func(value: float64) -> float64;
+    /// Returns e^value - 1 in a way that is accurate even if the number is close to zero.
+    exp-m1-f32: func(value: float32) -> float32;
+    /// Returns e^value - 1 in a way that is accurate even if the number is close to zero.
+    exp-m1-f64: func(value: float64) -> float64;
 
-  /// Returns the logarithm of the number with respect to an arbitrary base.
-  log-f32: func(base: float32, value: float32) -> float32;
-  /// Returns the logarithm of the number with respect to an arbitrary base.
-  log-f64: func(base: float64, value: float64) -> float64;
+    /// Returns the logarithm of the number with respect to an arbitrary base.
+    log-f32: func(base: float32, value: float32) -> float32;
+    /// Returns the logarithm of the number with respect to an arbitrary base.
+    log-f64: func(base: float64, value: float64) -> float64;
 
-  /// Returns the natural logarithm of the number, more accurate than using log function
-  ln-f32: func(value: float32) -> float32;
-  /// Returns the natural logarithm of the number, more accurate than using log function
-  ln-f64: func(value: float64) -> float64;
-  /// Returns ln(n+1) (natural logarithm) more accurately than if the operations were performed separately.
-  ln-p1-f32: func(value: float32) -> float32;
-  /// Returns ln(n+1) (natural logarithm) more accurately than if the operations were performed separately.
-  ln-p1-f64: func(value: float64) -> float64;
+    /// Returns the natural logarithm of the number, more accurate than using log function
+    ln-f32: func(value: float32) -> float32;
+    /// Returns the natural logarithm of the number, more accurate than using log function
+    ln-f64: func(value: float64) -> float64;
+    /// Returns ln(n+1) (natural logarithm) more accurately than if the operations were performed separately.
+    ln-p1-f32: func(value: float32) -> float32;
+    /// Returns ln(n+1) (natural logarithm) more accurately than if the operations were performed separately.
+    ln-p1-f64: func(value: float64) -> float64;
 
-  /// Returns the base 2 logarithm of the number, more accurate than using log function
-  log2-f32: func(value: float32) -> float32;
-  /// Returns the base 2 logarithm of the number, more accurate than using log function
-  log2-f64: func(value: float64) -> float64;
-  /// Returns the base 10 logarithm of the number, more accurate than using log function
-  log10-f32: func(value: float32) -> float32;
-  /// Returns the base 10 logarithm of the number, more accurate than using log function
-  log10-f64: func(value: float64) -> float64;
+    /// Returns the base 2 logarithm of the number, more accurate than using log function
+    log2-f32: func(value: float32) -> float32;
+    /// Returns the base 2 logarithm of the number, more accurate than using log function
+    log2-f64: func(value: float64) -> float64;
+    /// Returns the base 10 logarithm of the number, more accurate than using log function
+    log10-f32: func(value: float32) -> float32;
+    /// Returns the base 10 logarithm of the number, more accurate than using log function
+    log10-f64: func(value: float64) -> float64;
 
 
-  /// Computes the cosine of a number (in radians).
-  cos-f32: func(value: float32) -> float32;
-  /// Computes the cosine of a number (in radians).
-  cos-f64: func(value: float64) -> float64;
-  /// Computes the hyperbolic cosine of a number (in radians).
-  cosh-f32: func(value: float32) -> float32;
-  /// Computes the hyperbolic cosine of a number (in radians).
-  cosh-f64: func(value: float64) -> float64;
+    /// Computes the cosine of a number (in radians).
+    cos-f32: func(value: float32) -> float32;
+    /// Computes the cosine of a number (in radians).
+    cos-f64: func(value: float64) -> float64;
+    /// Computes the hyperbolic cosine of a number (in radians).
+    cosh-f32: func(value: float32) -> float32;
+    /// Computes the hyperbolic cosine of a number (in radians).
+    cosh-f64: func(value: float64) -> float64;
 
-  /// Computes the sine of a number (in radians).
-  sin-f32: func(value: float32) -> float32;
-  /// Computes the sine of a number (in radians).
-  sin-f64: func(value: float64) -> float64;
-  /// Computes the hyperbolic of a number (in radians).
-  sinh-f32: func(value: float32) -> float32;
-  /// Computes the hyperbolic of a number (in radians).
-  sinh-f64: func(value: float64) -> float64;
+    /// Computes the sine of a number (in radians).
+    sin-f32: func(value: float32) -> float32;
+    /// Computes the sine of a number (in radians).
+    sin-f64: func(value: float64) -> float64;
+    /// Computes the hyperbolic of a number (in radians).
+    sinh-f32: func(value: float32) -> float32;
+    /// Computes the hyperbolic of a number (in radians).
+    sinh-f64: func(value: float64) -> float64;
 
-  /// Computes the tangent of a number (in radians).
-  tan-f32: func(value: float32) -> float32;
-  /// Computes the tangent of a number (in radians).
-  tan-f64: func(value: float64) -> float64;
-  /// Computes the hyperbolic tangent of a number (in radians).
-  tanh-f32: func(value: float32) -> float32;
-  /// Computes the hyperbolic tangent of a number (in radians).
-  tanh-f64: func(value: float64) -> float64;
+    /// Computes the tangent of a number (in radians).
+    tan-f32: func(value: float32) -> float32;
+    /// Computes the tangent of a number (in radians).
+    tan-f64: func(value: float64) -> float64;
+    /// Computes the hyperbolic tangent of a number (in radians).
+    tanh-f32: func(value: float32) -> float32;
+    /// Computes the hyperbolic tangent of a number (in radians).
+    tanh-f64: func(value: float64) -> float64;
 
-  /// Computes the arccosine of a number.
-  ///
-  /// Return value is in radians in the range [0, π] or NaN if the number is outside the range [-1, 1].
-  acos-f32: func(value: float32) -> float32;
-  /// Computes the arccosine of a number.
-  ///
-  /// Return value is in radians in the range [0, π] or NaN if the number is outside the range [-1, 1].
-  acos-f64: func(value: float64) -> float64;
-  /// Returns the inverse hyperbolic cosine of a number
-  acosh-f32: func(value: float32) -> float32;
-  /// Returns the inverse hyperbolic cosine of a number
-  acosh-f64: func(value: float64) -> float64;
+    /// Computes the arccosine of a number.
+    ///
+    /// Return value is in radians in the range [0, π] or NaN if the number is outside the range [-1, 1].
+    acos-f32: func(value: float32) -> float32;
+    /// Computes the arccosine of a number.
+    ///
+    /// Return value is in radians in the range [0, π] or NaN if the number is outside the range [-1, 1].
+    acos-f64: func(value: float64) -> float64;
+    /// Returns the inverse hyperbolic cosine of a number
+    acosh-f32: func(value: float32) -> float32;
+    /// Returns the inverse hyperbolic cosine of a number
+    acosh-f64: func(value: float64) -> float64;
 
-  /// Computes the arcsine of a number.
-  ///
-  /// Return value is in radians in the range [-π/2, π/2] or NaN if the number is outside the range [-1, 1].
-  asin-f32: func(value: float32) -> float32;
-  /// Computes the arcsine of a number.
-  ///
-  /// Return value is in radians in the range [-π/2, π/2] or NaN if the number is outside the range [-1, 1].
-  asin-f64: func(value: float64) -> float64;
-  /// Returns the inverse hyperbolic sine of a number
-  asinh-f32: func(value: float32) -> float32;
-  /// Returns the inverse hyperbolic sine of a number
-  asinh-f64: func(value: float64) -> float64;
+    /// Computes the arcsine of a number.
+    ///
+    /// Return value is in radians in the range [-π/2, π/2] or NaN if the number is outside the range [-1, 1].
+    asin-f32: func(value: float32) -> float32;
+    /// Computes the arcsine of a number.
+    ///
+    /// Return value is in radians in the range [-π/2, π/2] or NaN if the number is outside the range [-1, 1].
+    asin-f64: func(value: float64) -> float64;
+    /// Returns the inverse hyperbolic sine of a number
+    asinh-f32: func(value: float32) -> float32;
+    /// Returns the inverse hyperbolic sine of a number
+    asinh-f64: func(value: float64) -> float64;
 
-  /// Computes the arctangent of a number.
-  ///
-  /// Return value is in radians in the range [-π/2, π/2];
-  atan-f32: func(value: float32) -> float32;
-  /// Computes the arctangent of a number.
-  ///
-  /// Return value is in radians in the range [-π/2, π/2];
-  atan-f64: func(value: float64) -> float64;
-  /// Returns the inverse hyperbolic tangent of a number
-  atanh-f32: func(value: float32) -> float32;
-  /// Returns the inverse hyperbolic tangent of a number
-  atanh-f64: func(value: float64) -> float64;
+    /// Computes the arctangent of a number.
+    ///
+    /// Return value is in radians in the range [-π/2, π/2];
+    atan-f32: func(value: float32) -> float32;
+    /// Computes the arctangent of a number.
+    ///
+    /// Return value is in radians in the range [-π/2, π/2];
+    atan-f64: func(value: float64) -> float64;
+    /// Returns the inverse hyperbolic tangent of a number
+    atanh-f32: func(value: float32) -> float32;
+    /// Returns the inverse hyperbolic tangent of a number
+    atanh-f64: func(value: float64) -> float64;
 }

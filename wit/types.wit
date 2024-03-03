@@ -7,29 +7,13 @@ interface types {
         invalid,
     }
 
-    /// The basic unit of big numbers, which can be shared in big-integer, big-fraction, big-complex and other composite structures.
-    ///
-    /// Unsigned integers are immutable shared objects. Therefore, some memory allocation can be avoided when creating operations such as inverse numbers, absolute values, fractions, etc.
-    ///
-    /// Equal big integers do not necessarily have the same resource ID. As long as every bit that makes up the large integer is equal, the two large integers are equal.
-    resource unsigned-integer {
-        from-u32: static func(value: u32) -> unsigned-integer;
-        from-u64: static func(value: u64) -> unsigned-integer;
-
-        add: func(other: borrow<unsigned-integer>) -> unsigned-integer;
-        sub: func(other: borrow<unsigned-integer>) -> unsigned-integer;
-        sub-saturating: func(other: borrow<unsigned-integer>) -> unsigned-integer;
-        sub-checked: func(other: borrow<unsigned-integer>) -> option<unsigned-integer>;
-
-        mul: func(other: borrow<unsigned-integer>) -> unsigned-integer;
-        div: func(other: borrow<unsigned-integer>) -> unsigned-integer;
-
-        as-f32: func() -> float32;
-        as-f64: func() -> float64;
-
-        parse: static func(text: string, radix: u32) -> result<unsigned-integer, parse-error>;
-        to-radix-string: func(radix: u32) -> string;
+    variant math-error {
+        /// The operation is not supported
+        unsupported,
+        /// The operation is not allowed
+        forbidden,
     }
+
     enum sign {
         /// Neither positive nor negative, such as zero
         no-sign,
@@ -38,10 +22,41 @@ interface types {
         /// This is a negative number less than zero
         negative,
     }
-    record integer {
-        sign: sign,
-        digits: borrow<unsigned-integer>,
+
+    /// The basic unit of big numbers, which can be shared in big-integer, big-fraction, big-complex and other composite structures.
+    ///
+    /// Unsigned integers are immutable shared objects. Therefore, some memory allocation can be avoided when creating operations such as inverse numbers, absolute values, fractions, etc.
+    ///
+    /// Equal big integers do not necessarily have the same resource ID. As long as every bit that makes up the large integer is equal, the two large integers are equal.
+    resource integer {
+        from-u32: static func(value: u32) -> integer;
+        from-u64: static func(value: u64) -> integer;
+        parse: static func(text: string, radix: u32) -> result<integer, parse-error>;
+
+        add: func(other: borrow<integer>) -> integer;
+        sub: func(other: borrow<integer>) -> integer;
+        mul: func(other: borrow<integer>) -> integer;
+        div: func(other: borrow<integer>) -> integer;
+
+        as-f32: func() -> float32;
+        as-u32: func() -> result<u32, math-error>;
+
+        as-f64: func() -> float64;
+        as-u64: func() -> result<u64, math-error>;
+
+        clone: func() -> own<integer>;
+        to-buffer: func() -> own<integer-buffer>;
+        to-radix-string: func(radix: u32) -> string;
     }
+    resource integer-buffer {
+        constructor(capacity: u64);
+        add-assign: func(other: own<integer>);
+        sub-assign: func(other: own<integer>);
+        mul-assign: func(other: own<integer>);
+        div-assign: func(other: own<integer>) -> result<_, math-error>;
+        finish: func() -> integer;
+    }
+
     /// The numerator and denominator must be the simplest fraction, that is, gcd(numerator, denominator) = 1.
     ///
     /// ## Zero
@@ -49,9 +64,9 @@ interface types {
     /// The canonical form is fraction { sign = no-sign, numerator = 0, denominator = 1 }.
     ///
     /// If the sign is no-sign, then the number is considered to represent zero and the numerator and denominator are no longer checked.
-    record fraction {
-        sign: sign,
-        numerator: borrow<unsigned-integer>,
-        denominator: borrow<unsigned-integer>,
+    resource fraction {
+        sign: func() -> sign;
+        numerator: func() -> borrow<integer>;
+        denominator: func() -> borrow<integer>;
     }
 }

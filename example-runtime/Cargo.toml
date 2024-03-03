@@ -18,13 +18,13 @@ num = "0.4.1"
 wat = "1.201.0"
 
 [dependencies.wasmtime-wasi]
-git = "https://github.com/bytecodealliance/wasmtime"
-version = "20.0.0"
+#git = "https://github.com/bytecodealliance/wasmtime"
+version = "19.0.1"
 features = []
 
 [dependencies.wasmtime]
-git = "https://github.com/bytecodealliance/wasmtime"
-version = "20.0.0"
+#git = "https://github.com/bytecodealliance/wasmtime"
+version = "19.0.1"
 features = ["component-model", "async"]
 
 [dev-dependencies]
