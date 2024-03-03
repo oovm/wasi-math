@@ -73,19 +73,18 @@ async fn get_component(engine: Engine, input: Component) -> anyhow::Result<MathR
 
 pub struct ContextView {
     wasi: WasiCtx,
-    resources: ResourceTable,
     extension: MathContext,
 }
 
 impl ContextView {
     fn new(table: ResourceTable, wasi: WasiCtx) -> Self {
-        Self { resources: table, wasi, extension: MathContext {} }
+        Self { wasi, extension: MathContext { table } }
     }
 }
 
 impl WasiView for ContextView {
     fn table(&mut self) -> &mut ResourceTable {
-        &mut self.resources
+        &mut self.extension.table
     }
 
     fn ctx(&mut self) -> &mut WasiCtx {

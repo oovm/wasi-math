@@ -1,37 +1,77 @@
-use wasmtime::component::{Resource};
-use crate::wasi::math::types::{Fraction, HostFraction, HostInteger, HostIntegerBuffer, HostUnsignedInteger, Integer, IntegerBuffer, MathError, ParseError, Sign, UnsignedInteger};
+use crate::wasi::math::types::{
+    Fraction, HostFraction, HostInteger, HostIntegerBuffer, Integer, IntegerBuffer, MathError,
+    ParseError, Sign,
+};
+use num::{BigInt, Num};
+use std::ops::{Add, AddAssign, DivAssign, MulAssign, SubAssign};
+use wasmtime::component::{Resource, ResourceTable};
 
 #[derive(Default)]
-pub struct MathContext {}
+pub struct MathContext {
+    pub(crate) table: ResourceTable,
+}
 
 #[allow(unused_variables)]
 impl HostInteger for MathContext {
     fn from_u32(&mut self, value: u32) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+        let int = BigInt::from(value);
+        Ok(self.table.push(int)?)
     }
 
     fn from_u64(&mut self, value: u64) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+        let int = BigInt::from(value);
+        Ok(self.table.push(int)?)
     }
 
-    fn parse(&mut self, text: String, radix: u32) -> anyhow::Result<Result<Resource<Integer>, ParseError>> {
-        todo!()
+    fn parse(
+        &mut self,
+        text: String,
+        radix: u32,
+    ) -> anyhow::Result<Result<Resource<Integer>, ParseError>> {
+        match BigInt::from_str_radix(&text, radix) {
+            Ok(int) => Ok(Ok(self.table.push(int)?)),
+            Err(e) => Ok(Err(ParseError::Invalid)),
+        }
     }
 
-    fn add(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+    fn add(
+        &mut self,
+        self_: Resource<Integer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<Resource<Integer>> {
+        let lhs = self.table.get(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(self.table.push(lhs + rhs)?)
     }
 
-    fn sub(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+    fn sub(
+        &mut self,
+        self_: Resource<Integer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<Resource<Integer>> {
+        let lhs = self.table.get(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(self.table.push(lhs - rhs)?)
     }
 
-    fn mul(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+    fn mul(
+        &mut self,
+        self_: Resource<Integer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<Resource<Integer>> {
+        let lhs = self.table.get(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(self.table.push(lhs * rhs)?)
     }
 
-    fn div(&mut self, self_: Resource<Integer>, other: Resource<Integer>) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+    fn div(
+        &mut self,
+        self_: Resource<Integer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<Resource<Integer>> {
+        let lhs = self.table.get(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(self.table.push(lhs / rhs)?)
     }
 
     fn as_f32(&mut self, self_: Resource<Integer>) -> anyhow::Result<f32> {
@@ -69,31 +109,57 @@ impl HostInteger for MathContext {
 
 impl HostIntegerBuffer for MathContext {
     fn new(&mut self, capacity: u64) -> anyhow::Result<Resource<IntegerBuffer>> {
-        todo!()
+        let int = BigInt::new(Sign::NoSign.into(), Vec::with_capacity(capacity as usize));
+        Ok(self.table.push(int)?)
     }
 
-    fn add_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
-        todo!()
+    fn add_assign(
+        &mut self,
+        self_: Resource<IntegerBuffer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<()> {
+        let lhs = self.table.get_mut(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(lhs.add_assign(rhs))
     }
 
-    fn sub_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
-        todo!()
+    fn sub_assign(
+        &mut self,
+        self_: Resource<IntegerBuffer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<()> {
+        let lhs = self.table.get_mut(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(lhs.sub_assign(rhs))
     }
 
-    fn mul_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<()> {
-        todo!()
+    fn mul_assign(
+        &mut self,
+        self_: Resource<IntegerBuffer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<()> {
+        let lhs = self.table.get_mut(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(lhs.mul_assign(rhs))
     }
 
-    fn div_assign(&mut self, self_: Resource<IntegerBuffer>, other: Resource<Integer>) -> anyhow::Result<Result<(), MathError>> {
-        todo!()
+    fn div_assign(
+        &mut self,
+        self_: Resource<IntegerBuffer>,
+        other: Resource<Integer>,
+    ) -> anyhow::Result<Result<(), MathError>> {
+        let lhs = self.table.get_mut(&self_)?;
+        let rhs = self.table.get(&other)?;
+        Ok(Ok(lhs.div_assign(rhs)))
     }
 
     fn finish(&mut self, self_: Resource<IntegerBuffer>) -> anyhow::Result<Resource<Integer>> {
-        todo!()
+        Ok(self_)
     }
 
     fn drop(&mut self, rep: Resource<IntegerBuffer>) -> anyhow::Result<()> {
-        todo!()
+        self.table.delete(rep)?;
+        Ok(())
     }
 }
 
@@ -119,7 +185,7 @@ impl crate::wasi::math::types::Host for MathContext {}
 
 impl crate::wasi::math::arithmetic::Host for MathContext {
     fn pow_f32(&mut self, base: f32, exponent: f32) -> anyhow::Result<f32> {
-         Ok(base.powf(exponent))
+        Ok(base.powf(exponent))
     }
 
     fn pow_f64(&mut self, base: f64, exponent: f64) -> anyhow::Result<f64> {
@@ -207,7 +273,7 @@ impl crate::wasi::math::arithmetic::Host for MathContext {
     }
 
     fn cosh_f32(&mut self, value: f32) -> anyhow::Result<f32> {
-         Ok(value.cosh())
+        Ok(value.cosh())
     }
 
     fn cosh_f64(&mut self, value: f64) -> anyhow::Result<f64> {
@@ -296,3 +362,23 @@ impl crate::wasi::math::arithmetic::Host for MathContext {
 }
 
 impl crate::wasi::math::conversion::Host for MathContext {}
+
+impl From<Sign> for num::bigint::Sign {
+    fn from(value: Sign) -> Self {
+        match value {
+            Sign::NoSign => num::bigint::Sign::NoSign,
+            Sign::Positive => num::bigint::Sign::Plus,
+            Sign::Negative => num::bigint::Sign::Minus,
+        }
+    }
+}
+
+impl From<num::bigint::Sign> for Sign {
+    fn from(value: num::bigint::Sign) -> Self {
+        match value {
+            num::bigint::Sign::Minus => Sign::Negative,
+            num::bigint::Sign::NoSign => Sign::NoSign,
+            num::bigint::Sign::Plus => Sign::Positive,
+        }
+    }
+}
