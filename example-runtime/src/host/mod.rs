@@ -1,9 +1,10 @@
 use crate::wasi::math::types::{
     Fraction, HostFraction, HostInteger, HostIntegerBuffer, Integer, IntegerBuffer, MathError,
-    ParseError, Sign,
+    Sign, SyntaxError,
 };
-use num::{BigInt, Num};
-use std::ops::{Add, AddAssign, DivAssign, MulAssign, SubAssign};
+use num::{BigInt, Num, ToPrimitive};
+use std::mem::transmute;
+use std::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use wasmtime::component::{Resource, ResourceTable};
 
 #[derive(Default)]
@@ -26,11 +27,11 @@ impl HostInteger for MathContext {
     fn parse(
         &mut self,
         text: String,
-        radix: u32,
-    ) -> anyhow::Result<Result<Resource<Integer>, ParseError>> {
-        match BigInt::from_str_radix(&text, radix) {
+        radix: u8,
+    ) -> anyhow::Result<Result<Resource<Integer>, MathError>> {
+        match BigInt::from_str_radix(&text, radix as u32) {
             Ok(int) => Ok(Ok(self.table.push(int)?)),
-            Err(e) => Ok(Err(ParseError::Invalid)),
+            Err(e) => Ok(Err(MathError::Syntax(SyntaxError::Invalid))),
         }
     }
 
@@ -66,16 +67,22 @@ impl HostInteger for MathContext {
 
     fn div(
         &mut self,
-        self_: Resource<Integer>,
-        other: Resource<Integer>,
-    ) -> anyhow::Result<Resource<Integer>> {
+        self_: Resource<IntegerBuffer>,
+        other: Resource<IntegerBuffer>,
+    ) -> anyhow::Result<Result<Resource<IntegerBuffer>, MathError>> {
         let lhs = self.table.get(&self_)?;
         let rhs = self.table.get(&other)?;
-        Ok(self.table.push(lhs / rhs)?)
+        match lhs.checked_div(rhs) {
+            Some(s) => Ok(Ok(self.table.push(s)?)),
+            None => Ok(Err(MathError::DivideZero)),
+        }
     }
 
     fn as_f32(&mut self, self_: Resource<Integer>) -> anyhow::Result<f32> {
-        todo!()
+        let lhs = self.table.get(&self_)?;
+        // SAFETY: Conversion never fails
+        let float = unsafe { lhs.to_f32().unwrap_unchecked() };
+        Ok(float)
     }
 
     fn as_u32(&mut self, self_: Resource<Integer>) -> anyhow::Result<Result<u32, MathError>> {
@@ -83,7 +90,10 @@ impl HostInteger for MathContext {
     }
 
     fn as_f64(&mut self, self_: Resource<Integer>) -> anyhow::Result<f64> {
-        todo!()
+        let lhs = self.table.get(&self_)?;
+        // SAFETY: Conversion never fails
+        let float = unsafe { lhs.to_f64().unwrap_unchecked() };
+        Ok(float)
     }
 
     fn as_u64(&mut self, self_: Resource<Integer>) -> anyhow::Result<Result<u64, MathError>> {
@@ -98,12 +108,13 @@ impl HostInteger for MathContext {
         todo!()
     }
 
-    fn to_radix_string(&mut self, self_: Resource<Integer>, radix: u32) -> anyhow::Result<String> {
+    fn to_radix_string(&mut self, self_: Resource<Integer>, radix: u8) -> anyhow::Result<String> {
         todo!()
     }
 
     fn drop(&mut self, rep: Resource<Integer>) -> anyhow::Result<()> {
-        todo!()
+        self.table.delete(rep)?;
+        Ok(())
     }
 }
 
@@ -118,7 +129,11 @@ impl HostIntegerBuffer for MathContext {
         self_: Resource<IntegerBuffer>,
         other: Resource<Integer>,
     ) -> anyhow::Result<()> {
-        let lhs = self.table.get_mut(&self_)?;
+        // SAFETY: Double borrowing different values
+        let lhs = unsafe {
+            let ptr = self.table.get_mut(&self_)?;
+            unsafe { transmute::<&mut BigInt, &mut BigInt>(ptr) }
+        };
         let rhs = self.table.get(&other)?;
         Ok(lhs.add_assign(rhs))
     }
@@ -128,7 +143,11 @@ impl HostIntegerBuffer for MathContext {
         self_: Resource<IntegerBuffer>,
         other: Resource<Integer>,
     ) -> anyhow::Result<()> {
-        let lhs = self.table.get_mut(&self_)?;
+        // SAFETY: Double borrowing different values
+        let lhs = unsafe {
+            let ptr = self.table.get_mut(&self_)?;
+            unsafe { transmute::<&mut BigInt, &mut BigInt>(ptr) }
+        };
         let rhs = self.table.get(&other)?;
         Ok(lhs.sub_assign(rhs))
     }
@@ -138,7 +157,11 @@ impl HostIntegerBuffer for MathContext {
         self_: Resource<IntegerBuffer>,
         other: Resource<Integer>,
     ) -> anyhow::Result<()> {
-        let lhs = self.table.get_mut(&self_)?;
+        // SAFETY: Double borrowing different values
+        let lhs = unsafe {
+            let ptr = self.table.get_mut(&self_)?;
+            unsafe { transmute::<&mut BigInt, &mut BigInt>(ptr) }
+        };
         let rhs = self.table.get(&other)?;
         Ok(lhs.mul_assign(rhs))
     }
@@ -148,7 +171,11 @@ impl HostIntegerBuffer for MathContext {
         self_: Resource<IntegerBuffer>,
         other: Resource<Integer>,
     ) -> anyhow::Result<Result<(), MathError>> {
-        let lhs = self.table.get_mut(&self_)?;
+        // SAFETY: Double borrowing different values
+        let lhs = unsafe {
+            let ptr = self.table.get_mut(&self_)?;
+            unsafe { transmute::<&mut BigInt, &mut BigInt>(ptr) }
+        };
         let rhs = self.table.get(&other)?;
         Ok(Ok(lhs.div_assign(rhs)))
     }
@@ -164,15 +191,26 @@ impl HostIntegerBuffer for MathContext {
 }
 
 impl HostFraction for MathContext {
+    fn new(
+        &mut self,
+        numerator: Resource<IntegerBuffer>,
+        denominator: Resource<IntegerBuffer>,
+    ) -> anyhow::Result<Resource<Fraction>> {
+        todo!()
+    }
+
     fn sign(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Sign> {
         todo!()
     }
 
-    fn numerator(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Resource<Integer>> {
+    fn numerator(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Resource<IntegerBuffer>> {
         todo!()
     }
 
-    fn denominator(&mut self, self_: Resource<Fraction>) -> anyhow::Result<Resource<Integer>> {
+    fn denominator(
+        &mut self,
+        self_: Resource<Fraction>,
+    ) -> anyhow::Result<Resource<IntegerBuffer>> {
         todo!()
     }
 

@@ -7,6 +7,7 @@ wasmtime::component::bindgen!({
      with: {
           "wasi:math/types/integer": BigInt,
           "wasi:math/types/integer-buffer": BigInt,
+
      },
 });
 

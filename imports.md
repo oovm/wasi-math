@@ -11,16 +11,16 @@
 <h2><a name="wasi:math_types_0.2.1_draft">Import interface wasi:math/types@0.2.1-draft</a></h2>
 <hr />
 <h3>Types</h3>
-<h4><a name="parse_error"><code>enum parse-error</code></a></h4>
+<h4><a name="syntax_error"><code>enum syntax-error</code></a></h4>
 <p>Parse failed</p>
 <h5>Enum Cases</h5>
 <ul>
 <li>
-<p><a name="parse_error.empty"><code>empty</code></a></p>
+<p><a name="syntax_error.empty"><code>empty</code></a></p>
 <p>The input string is empty
 </li>
 <li>
-<p><a name="parse_error.invalid"><code>invalid</code></a></p>
+<p><a name="syntax_error.invalid"><code>invalid</code></a></p>
 <p>The input string is not a valid number
 </li>
 </ul>
@@ -28,12 +28,12 @@
 <h5>Variant Cases</h5>
 <ul>
 <li>
-<p><a name="math_error.unsupported"><code>unsupported</code></a></p>
+<p><a name="math_error.syntax"><code>syntax</code></a>: <a href="#syntax_error"><a href="#syntax_error"><code>syntax-error</code></a></a></p>
 <p>The operation is not supported
 </li>
 <li>
-<p><a name="math_error.forbidden"><code>forbidden</code></a></p>
-<p>The operation is not allowed
+<p><a name="math_error.divide_zero"><code>divide-zero</code></a></p>
+<p>Trying to divide zero
 </li>
 </ul>
 <h4><a name="sign"><code>enum sign</code></a></h4>
@@ -85,11 +85,11 @@
 <h5>Params</h5>
 <ul>
 <li><a name="static_integer.parse.text"><code>text</code></a>: <code>string</code></li>
-<li><a name="static_integer.parse.radix"><code>radix</code></a>: <code>u32</code></li>
+<li><a name="static_integer.parse.radix"><code>radix</code></a>: <code>u8</code></li>
 </ul>
 <h5>Return values</h5>
 <ul>
-<li><a name="static_integer.parse.0"></a> result&lt;own&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;, <a href="#parse_error"><a href="#parse_error"><code>parse-error</code></a></a>&gt;</li>
+<li><a name="static_integer.parse.0"></a> result&lt;own&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;, <a href="#math_error"><a href="#math_error"><code>math-error</code></a></a>&gt;</li>
 </ul>
 <h4><a name="method_integer.add"><code>[method]integer.add: func</code></a></h4>
 <h5>Params</h5>
@@ -129,7 +129,7 @@
 </ul>
 <h5>Return values</h5>
 <ul>
-<li><a name="method_integer.div.0"></a> own&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;</li>
+<li><a name="method_integer.div.0"></a> result&lt;own&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;, <a href="#math_error"><a href="#math_error"><code>math-error</code></a></a>&gt;</li>
 </ul>
 <h4><a name="method_integer.as_f32"><code>[method]integer.as-f32: func</code></a></h4>
 <h5>Params</h5>
@@ -189,7 +189,7 @@
 <h5>Params</h5>
 <ul>
 <li><a name="method_integer.to_radix_string.self"><code>self</code></a>: borrow&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;</li>
-<li><a name="method_integer.to_radix_string.radix"><code>radix</code></a>: <code>u32</code></li>
+<li><a name="method_integer.to_radix_string.radix"><code>radix</code></a>: <code>u8</code></li>
 </ul>
 <h5>Return values</h5>
 <ul>
@@ -240,6 +240,16 @@
 <h5>Return values</h5>
 <ul>
 <li><a name="method_integer_buffer.finish.0"></a> own&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;</li>
+</ul>
+<h4><a name="constructor_fraction"><code>[constructor]fraction: func</code></a></h4>
+<h5>Params</h5>
+<ul>
+<li><a name="constructor_fraction.numerator"><code>numerator</code></a>: borrow&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;</li>
+<li><a name="constructor_fraction.denominator"><code>denominator</code></a>: borrow&lt;<a href="#integer"><a href="#integer"><code>integer</code></a></a>&gt;</li>
+</ul>
+<h5>Return values</h5>
+<ul>
+<li><a name="constructor_fraction.0"></a> own&lt;<a href="#fraction"><a href="#fraction"><code>fraction</code></a></a>&gt;</li>
 </ul>
 <h4><a name="method_fraction.sign"><code>[method]fraction.sign: func</code></a></h4>
 <h5>Params</h5>
